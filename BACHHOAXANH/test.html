@@ -1,0 +1,74 @@
+<html>
+<div class="cart-content ">
+    <div id="block1" v-bind:class="{hidden: model.Cart.StepCart == 2}">
+        <div class="p-gender">
+            Giỏ hàng của Bạn
+        </div>
+        <div class="block">
+            <div class="orderid">
+                <span>Chỉnh sửa đơn hàng: </span>
+                <label>#</label>
+            </div>
+            <div class="lst-product" v-bind:class="{onlyone: model.Cart.TotalItemShow > 1, discountShipFee: model.CartTotal.ShipFee > 0 && model.CartTotal.Total + model.CartTotal.TotalBillPromotion < 300000}">
+                <cart-items v-bind:model="model" v-bind:urlcart="'/gio-hang/Order/'" v-bind:gender="'Bạn'" v-bind:gendername="'Bạn'" v-on:changedmodel="onchangemodel"></cart-items>
+            </div>
+            <!--Danh sách n khuyến mãi rau 4kFarm-->
+            <promotion4k-farm v-if="!model.Cart.IsHasComboPack" v-bind:model="model" v-bind:ismobile="false" v-on:changedmodel="onchangemodel"></promotion4k-farm>
+
+            <div v-if="model.CartTotal.ShipFee + model.CartTotal.ApartmentShipFee > 0 && !model.Cart.IsOffFeeShip">
+                <!--New or chưa login or chưa nhập sdt or sdt chưa từng mua hàng-->
+                <div v-if="(model.Cart.CustomerRank == -1 || model.Cart.CustomerRank == 1) && (model.CartTotal.Total + model.CartTotal.TotalBillPromotion - model.CartTotal.CouponDiscount >= 100000)&& !model.Cart.IsHasComboPack" class="discountship">
+                    <div class="muathem">
+                        <a href="/"> Mua thêm</a>
+                    </div>
+                    sản phẩm (Ưu đãi giảm phí giao không áp dụng khi mua hàng nặng, to: <b>Nước giải khát, Nước suối, Bia, Nước uống có cồn</b>)
+                </div>
+
+                <div class="discountship" v-if="(model.Cart.CustomerRank == -1 || model.Cart.CustomerRank == 1) && (model.CartTotal.Total + model.CartTotal.TotalBillPromotion - model.CartTotal.CouponDiscount <  100000) && !model.Cart.IsHasComboPack">
+                    <div class="muathem">
+                        <a href="/"> Mua thêm</a>
+                        <span class="fulltext">
+                                <b>{{getValueBuyMoreDiscountFee(1) | toCurrency}}</b> để được
+                                <b v-html="getValueBuyMoreDiscountFee(2)"></b>
+                                (Không áp dụng khi mua hàng nặng, to:<b>Nước giải khát, Nước suối, Bia, Nước uống có cồn</b>)
+                            </span>
+                    </div>
+                </div>
+
+                <!--New Type = 4, miễn phí giao hàng max 15k-->
+                <div v-if="model.Cart.CustomerRank == 4 && (model.CartTotal.Total + model.CartTotal.TotalBillPromotion - model.CartTotal.CouponDiscount >= 100000)&& !model.Cart.IsHasComboPack" class="discountship">
+                    <div class="muathem">
+                        <a href="/"> Mua thêm</a>
+                    </div>
+                    sản phẩm
+                </div>
+
+                <div class="discountship" v-if="model.Cart.CustomerRank == 4 && (model.CartTotal.Total + model.CartTotal.TotalBillPromotion - model.CartTotal.CouponDiscount <  100000) && !model.Cart.IsHasComboPack">
+                    <div class="muathem">
+                        <a href="/"> Mua thêm</a>
+                        <span class="fulltext">
+                                <b>{{getValueBuyMoreDiscountFee(1) | toCurrency}}</b> để được
+                                <b v-html="getValueBuyMoreDiscountFee(2)"></b>
+                            </span>
+                    </div>
+                </div>
+
+                <!--Nomal-->
+                <div class="discountship" v-if="(model.Cart.CustomerRank == 2 || model.Cart.CustomerRank == 3) && (model.CartTotal.Total + model.CartTotal.TotalBillPromotion - model.CartTotal.CouponDiscount >= (model.Cart.CustomerRank == 2 ? 500000 : 250000))&& !model.Cart.IsHasComboPack">
+                    <div class="muathem">
+                        <a href="/"> Mua thêm</a>
+                    </div>
+                    sản phẩm (Ưu đãi giảm phí giao không áp dụng khi mua hàng nặng, to: <b>Nước giải khát, Nước suối, Bia, Nước uống có cồn</b>)
+                </div>
+                <div class="discountship" v-if="(model.Cart.CustomerRank == 2 || model.Cart.CustomerRank == 3)  && (model.CartTotal.Total + model.CartTotal.TotalBillPromotion - model.CartTotal.CouponDiscount <  (model.Cart.CustomerRank == 2 ? 500000 : 250000) ) && !model.Cart.IsHasComboPack">
+                    <div class="muathem">
+                        <a href="/"> Mua thêm</a>
+                        <span class="fulltext">
+                                <b>{{getValueBuyMoreDiscountFee(1) | toCurrency}}</b> để được
+                                <b v-html="getValueBuyMoreDiscountFee(2)"></b>
+                                (Không áp dụng khi mua hàng nặng, to: <b>Nước giải khát, Nước suối, Bia, Nước uống có cồn</b>)
+                            </span>
+                    </div>
+                </div>
+
+</html>
